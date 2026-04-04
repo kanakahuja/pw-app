@@ -1,9 +1,63 @@
 /* ============================================================
    navigation.js — Screen routing & stagger animations
+   + Persistent login: stays logged in across refreshes
+     until explicit logout
 ============================================================ */
+
+const AUTH_KEY = "pw_logged_in";
+const BATCH_KEY = "pw_batch";
 
 let _prevScreen = "home";
 
+/* ── BOOTSTRAP ────────────────────────────────────────── */
+document.addEventListener("DOMContentLoaded", () => {
+  // Init explainer
+  if (typeof EV !== "undefined") EV.init();
+
+  // ── Persistent login check ──
+  // If user was already logged in, skip login screen entirely
+  const isLoggedIn = localStorage.getItem(AUTH_KEY) === "true";
+  const savedBatch = localStorage.getItem(BATCH_KEY);
+
+  if (isLoggedIn) {
+    // Restore saved batch label in topnav
+    if (savedBatch) {
+      const batchSelector = document.querySelector(".batch-selector");
+      if (batchSelector) {
+        batchSelector.innerHTML =
+          savedBatch +
+          ' <svg width="12" height="12"><use href="#ico-chevdown"/></svg>';
+      }
+    }
+    // Remove .active from login, activate home directly
+    document
+      .querySelectorAll(".screen")
+      .forEach((s) => s.classList.remove("active", "slide-back"));
+    const home = document.getElementById("home");
+    if (home) {
+      home.classList.add("active");
+      setTimeout(() => runStagger(home), 30);
+    }
+  } else {
+    // Normal flow — login is already .active in HTML
+    runStagger(document.getElementById("login"));
+  }
+
+  // Counter animation when batch screen becomes visible
+  const batchScreen = document.getElementById("batch");
+  if (batchScreen) {
+    batchScreen.addEventListener("animationstart", () => {
+      animateCounters(batchScreen);
+    });
+  }
+});
+
+// Fallback EV init in case DOMContentLoaded already fired
+setTimeout(() => {
+  if (typeof EV !== "undefined") EV.init();
+}, 150);
+
+/* ── goTo ─────────────────────────────────────────────── */
 function goTo(id) {
   const current = document.querySelector(".screen.active");
   document
@@ -15,13 +69,15 @@ function goTo(id) {
   window.scrollTo(0, 0);
 
   // Stop canvas explainer if leaving ai-catchup
-  if (typeof EV !== "undefined" && id !== "ai-catchup") EV.stop();
+  if (typeof EV !== "undefined" && id !== "ai-catchup") {
+    if (typeof EV.stop === "function") EV.stop();
+  }
 
   // Reset course-setup state when entering
   if (id === "course-setup") {
     document
       .querySelectorAll("#course-setup .batch-chip")
-      .forEach((c) => c.classList.remove("selected"));
+      .forEach((c) => c.classList.remove("selected", "active"));
     const btn = document.getElementById("loginBtn");
     if (btn) {
       btn.disabled = true;
@@ -36,6 +92,7 @@ function goTo(id) {
   _prevScreen = current ? current.id : "home";
 }
 
+/* ── goBack ───────────────────────────────────────────── */
 function goBack(id) {
   const current = document.querySelector(".screen.active");
   document
@@ -46,45 +103,46 @@ function goBack(id) {
   next.classList.add("active", "slide-back");
   window.scrollTo(0, 0);
 
-  if (typeof EV !== "undefined" && id !== "ai-catchup") EV.stop();
+  if (typeof EV !== "undefined" && id !== "ai-catchup") {
+    if (typeof EV.stop === "function") EV.stop();
+  }
   setTimeout(() => runStagger(next), 30);
   _prevScreen = current ? current.id : "home";
 }
 
 /* ── COURSE SETUP ─────────────────────────────────────────
-   setBatchAndStart is called by each chip's onclick.
-   It only selects the chip + enables the button.
+   setBatchAndStart — selects chip + enables button only.
    Navigation happens only in confirmBatch().
 ─────────────────────────────────────────────────────────── */
 function setBatchAndStart(batchLabel, element) {
-  // Deselect all chips
   document
     .querySelectorAll("#course-setup .batch-chip")
     .forEach((c) => c.classList.remove("active", "selected"));
 
-  // Select the tapped chip
   if (element) {
     element.classList.add("selected");
     batchLabel = element.dataset.value || batchLabel;
   }
 
-  // Enable + update the continue button
   const btn = document.getElementById("loginBtn");
   if (btn && batchLabel) {
     btn.disabled = false;
     btn.textContent = "Start with " + batchLabel + "  →";
   }
 
-  // Play selection sound (no navigation yet)
   playSystemSound("pickup");
 }
 
-/* ── Called by the Continue button ── */
+/* ── confirmBatch — saves auth + batch, navigates to home ── */
 function confirmBatch() {
   const selected = document.querySelector("#course-setup .batch-chip.selected");
   if (!selected) return;
 
   const batchLabel = selected.dataset.value;
+
+  // ── Persist login state ──
+  localStorage.setItem(AUTH_KEY, "true");
+  if (batchLabel) localStorage.setItem(BATCH_KEY, batchLabel);
 
   // Update the home screen batch selector label
   const batchSelector = document.querySelector(".batch-selector");
@@ -96,6 +154,39 @@ function confirmBatch() {
 
   playSystemSound("pickup");
   setTimeout(() => goTo("home"), 180);
+}
+
+/* ── LOGOUT ───────────────────────────────────────────────
+   Call logOut() from the profile screen logout button.
+   In index.html change:
+     onclick="goTo('login')"
+   to:
+     onclick="logOut()"
+─────────────────────────────────────────────────────────── */
+function logOut() {
+  localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem(BATCH_KEY);
+  localStorage.removeItem("userPhone");
+
+  // Stop any playing media
+  if (typeof EV !== "undefined") {
+    if (typeof EV.stop === "function") EV.stop();
+  }
+
+  // Clear OTP boxes if present
+  document.querySelectorAll(".otp-box").forEach((b) => {
+    b.value = "";
+    b.classList.remove("filled");
+  });
+  const phoneInput = document.getElementById("phoneInput");
+  if (phoneInput) phoneInput.value = "";
+  const continueBtn = document.getElementById("continueBtn");
+  if (continueBtn) {
+    continueBtn.disabled = true;
+    continueBtn.style.opacity = "0.55";
+  }
+
+  goTo("login");
 }
 
 /* ── SOUND ────────────────────────────────────────────── */
@@ -209,25 +300,3 @@ function updatePlayBtnIcon(playing) {
   const use = btn.querySelector("use");
   if (use) use.setAttribute("href", playing ? "#ico-pause" : "#ico-play");
 }
-
-/* ── BOOTSTRAP ────────────────────────────────────────── */
-document.addEventListener("DOMContentLoaded", () => {
-  // Init explainer
-  if (typeof EV !== "undefined") EV.init();
-
-  // Run stagger on login screen
-  runStagger(document.getElementById("login"));
-
-  // Counter animation when batch screen becomes visible
-  const batchScreen = document.getElementById("batch");
-  if (batchScreen) {
-    batchScreen.addEventListener("animationstart", () => {
-      animateCounters(batchScreen);
-    });
-  }
-});
-
-// Fallback EV init in case DOMContentLoaded already fired
-setTimeout(() => {
-  if (typeof EV !== "undefined") EV.init();
-}, 150);
