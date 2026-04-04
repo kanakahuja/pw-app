@@ -1244,10 +1244,9 @@ const EV = (() => {
   }
 
   function syncIcon() {
-    // Update explainer play button
-    const ic = document.getElementById("vidPlayIcon");
+    const btn = document.getElementById("vidPlayBtn"); // the button
+    const ic = btn ? btn.querySelector("svg use") : null;
     if (ic) ic.setAttribute("href", playing ? "#ico-pause" : "#ico-play");
-    // Keep overlay hidden while playing
     const overlay = document.getElementById("videoOverlay");
     if (overlay) overlay.style.display = playing ? "none" : "flex";
   }
@@ -1256,36 +1255,85 @@ const EV = (() => {
   function toggleFullscreen() {
     const wrap = document.querySelector(".explainer-canvas-wrap");
     if (!wrap) return;
-    if (!document.fullscreenElement) {
-      (
-        wrap.requestFullscreen ||
-        wrap.webkitRequestFullscreen ||
-        wrap.mozRequestFullScreen
-      ).call(wrap);
-    } else {
-      (
-        document.exitFullscreen ||
-        document.webkitExitFullscreen ||
-        document.mozCancelFullScreen
-      ).call(document);
-    }
-  }
 
-  function onFullscreenChange() {
-    if (document.fullscreenElement) {
-      canvas.width = window.screen.width;
-      canvas.height = window.screen.height;
-      W = canvas.width;
-      H = canvas.height;
-    } else {
-      canvas.width = 640;
-      canvas.height = 360;
+    // iOS Safari: use CSS fullscreen (no API support for divs)
+    if (wrap.classList.contains("ev-fullscreen")) {
+      wrap.classList.remove("ev-fullscreen");
+      document.body.classList.remove("ev-fs-active");
+      const closeBtn = document.getElementById("evCloseBtn");
+      if (closeBtn) closeBtn.remove();
       W = 640;
       H = 360;
+      canvas.width = W;
+      canvas.height = H;
+      canvas.style.width = "";
+      canvas.style.height = "";
+      render();
+      return;
+    }
+
+    // Try native fullscreen first (Android Chrome / desktop)
+    if (wrap.requestFullscreen || wrap.webkitRequestFullscreen) {
+      const req = wrap.requestFullscreen || wrap.webkitRequestFullscreen;
+      req
+        .call(wrap)
+        .then(() => {
+          W = window.innerWidth;
+          H = window.innerHeight;
+          canvas.width = W;
+          canvas.height = H;
+          render();
+        })
+        .catch(() => {
+          // Fallback: CSS fullscreen for iOS
+          cssFullscreen(wrap);
+        });
+      return;
+    }
+
+    // Fallback for iOS
+    cssFullscreen(wrap);
+  }
+
+  function cssFullscreen(wrap) {
+    wrap.classList.add("ev-fullscreen");
+    document.body.classList.add("ev-fs-active");
+    W = window.innerWidth;
+    H = Math.round((W * 9) / 16);
+    canvas.width = W;
+    canvas.height = H;
+    canvas.style.width = "100%";
+    canvas.style.height = "auto";
+
+    // Add close button for iOS
+    if (!document.getElementById("evCloseBtn")) {
+      const closeBtn = document.createElement("button");
+      closeBtn.id = "evCloseBtn";
+      closeBtn.textContent = "✕";
+      closeBtn.style.cssText = `
+      position: absolute; top: 12px; right: 14px;
+      z-index: 10000; background: rgba(0,0,0,0.6);
+      color: #fff; border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-size: 14px;
+      font-weight: 700; cursor: pointer;
+    `;
+      closeBtn.onclick = () => toggleFullscreen();
+      wrap.appendChild(closeBtn);
     }
     render();
   }
-
+  function onFullscreenChange() {
+    // Native fullscreen exited (Android/desktop)
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      W = 640;
+      H = 360;
+      canvas.width = W;
+      canvas.height = H;
+      canvas.style.width = "";
+      canvas.style.height = "";
+      render();
+    }
+  }
   // ── Init ──
   function init() {
     canvas = document.getElementById("explainerCanvas");
@@ -1297,6 +1345,13 @@ const EV = (() => {
     // Hide scene pills
     document.querySelectorAll(".scene-pills, .scene-pill").forEach((el) => {
       el.style.display = "none";
+    });
+    // Close CSS fullscreen on canvas tap
+    canvas.addEventListener("click", () => {
+      const wrap = document.querySelector(".explainer-canvas-wrap");
+      if (wrap && wrap.classList.contains("ev-fullscreen")) {
+        toggleFullscreen();
+      }
     });
 
     injectFullscreenBtn();
