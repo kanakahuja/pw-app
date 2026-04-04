@@ -1,0 +1,283 @@
+/* ============================================================
+   COURSE SETUP SCREEN — course-setup.css
+============================================================ */
+
+#course-setup {
+  background: var(--bg);
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+#course-setup.active {
+  display: flex; /* ← this is the missing piece */
+}
+
+.setup-card {
+  width: 100%;
+  padding: 20px 16px 32px;
+  box-sizing: border-box;
+}
+
+/* ── HEADER ── */
+.pw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.pw-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pw-logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--grad-accent);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#course-setup .pw-logo-text {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+}
+
+.step-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text2);
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+/* ── PROGRESS BAR ── */
+.setup-progress-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.spbar {
+  height: 4px;
+  flex: 1;
+  border-radius: 4px;
+  background: var(--surface3);
+}
+
+.spbar.active {
+  background: var(--accent);
+}
+.spbar.done {
+  background: var(--green);
+}
+
+/* ── HERO TEXT ── */
+.setup-hero {
+  margin-bottom: 20px;
+}
+
+.setup-hero h1 {
+  font-size: 21px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.setup-highlight {
+  background: var(--grad-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.setup-hero p {
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+/* ── BATCH GRID ── */
+.batch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── BATCH CHIP ── */
+.batch-chip {
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 12px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.batch-chip:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(82, 70, 229, 0.12);
+}
+
+.batch-chip.active {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, #f3f2ff, #ffffff);
+  box-shadow: 0 6px 20px rgba(82, 70, 229, 0.18);
+}
+
+/* stagger animation */
+.batch-chip.stagger-item {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.batch-chip.stagger-item.visible {
+  opacity: 1 !important;
+  transform: translateY(0);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    border-color 0.22s,
+    box-shadow 0.22s;
+}
+
+/* ── BATCH ICON ── */
+.batch-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+/* ── BATCH LABELS ── */
+.batch-name {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.batch-sub {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: var(--surface2);
+  border-radius: 20px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ── CHECKMARK ── */
+.batch-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--accent);
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
+.batch-chip.active .batch-check {
+  transform: scale(1);
+}
+
+/* ── CONTINUE BUTTON ── */
+#course-setup .btn-primary {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+
+#course-setup .btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none;
+}
+
+/* ── STATS ROW ── */
+.setup-stats {
+  display: flex;
+  width: 100%;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  margin-top: 16px;
+  box-sizing: border-box;
+}
+
+.setup-stat {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 4px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.setup-stat + .setup-stat {
+  border-left: 1px solid var(--border);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 360px) {
+  .batch-grid {
+    gap: 8px;
+  }
+  .batch-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .batch-name {
+    font-size: 12px;
+  }
+  .batch-sub {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+}

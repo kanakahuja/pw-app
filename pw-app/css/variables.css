@@ -1,0 +1,256 @@
+/* ============================================================
+   VARIABLES & RESET
+   Physics Wallah – Udaan / Neev Batch App
+============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&display=swap");
+
+:root {
+  /* Core Colors */
+  --bg: #f4f4f8;
+  --white: #ffffff;
+  --surface2: #f0f0f6;
+  --surface3: #e8e8f2;
+  --border: #ebebf0;
+  --border2: #dcdce8;
+
+  /* Text */
+  --text: #16213e;
+  --text2: #5b5b7b;
+  --text3: #9595b0;
+
+  /* Brand */
+  --accent: #5246e5;
+  --accent2: #6b60f0;
+  --accent-light: rgba(82, 70, 229, 0.08);
+  --accent-light2: rgba(82, 70, 229, 0.15);
+
+  /* Status */
+  --red: #d93025;
+  --red-bg: rgba(217, 48, 37, 0.07);
+  --green: #0a8754;
+  --green-bg: rgba(10, 135, 84, 0.07);
+  --orange: #f47c20;
+  --gold: #f5a623;
+
+  /* Shape */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+
+  /* Shadows */
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 20px rgba(82, 70, 229, 0.16);
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 12px rgba(82, 70, 229, 0.08);
+
+  /* Gradients */
+  --grad-accent: linear-gradient(135deg, #5246e5, #7b6ef0);
+  --grad-orange: linear-gradient(135deg, #f47c20, #f9a55a);
+  --grad-green: linear-gradient(135deg, #0a8754, #1db975);
+  --grad-red: linear-gradient(135deg, #d93025, #f05a50);
+  --grad-dark: linear-gradient(135deg, #0a0a18, #1a1040);
+}
+
+/* ── RESET ── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 2px;
+}
+
+/* ── SCREEN TRANSITIONS ── */
+/* REPLACE the .screen block */
+.screen {
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.screen.active {
+  display: flex;
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.screen.slide-back {
+  display: flex;
+  animation: slideBack 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideBack {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes liveRing {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(217, 48, 37, 0.4);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 5px rgba(217, 48, 37, 0);
+  }
+}
+@keyframes alertShimmer {
+  0%,
+  100% {
+    border-color: rgba(217, 48, 37, 0.2);
+  }
+  50% {
+    border-color: rgba(217, 48, 37, 0.5);
+  }
+}
+@keyframes fabPulse {
+  0%,
+  100% {
+    box-shadow: 0 4px 18px rgba(82, 70, 229, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 4px 28px rgba(82, 70, 229, 0.65),
+      0 0 0 8px rgba(82, 70, 229, 0.08);
+  }
+}
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.3);
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes streakGlow {
+  0%,
+  100% {
+    box-shadow: 0 2px 10px rgba(244, 124, 32, 0.2);
+  }
+  50% {
+    box-shadow: 0 2px 20px rgba(244, 124, 32, 0.45);
+  }
+}
+
+/* ── STAGGER ANIMATION ── */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+.stagger-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── TAP FEEDBACK ── */
+button:active,
+.quick-card:active,
+.live-banner:active,
+.backlog-alert:active,
+.lecture-card:active,
+.subject-card:active,
+.chapter-item:active,
+.ts-item:active {
+  transform: scale(0.97);
+  transition: transform 0.1s;
+}
+
+/* ── UTILITY ── */
+.count-anim {
+  animation: countUp 0.5s ease forwards;
+}
