@@ -88,7 +88,7 @@
 .logo-circle {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #9a9aa2, #a19ec1);
+  background: linear-gradient(135deg, #fefefe, #a19ec1);
   border-radius: 16px;
   color: white;
   font-weight: 900;
@@ -147,13 +147,13 @@
   font-weight: 700;
   font-size: 14px;
   color: #444;
-  pointer-events: none; /* ← doesn't block input */
-  z-index: 1;
+  pointer-events: none;
+  z-index: 2; /* ← raised above input */
 }
 
 .input-field {
   width: 100%;
-  padding: 14px 14px 14px 50px;
+  padding: 14px 14px 14px 50px; /* ← increased left padding */
   border-radius: 14px;
   border: 1.5px solid #e5e7ef;
   background: #f7f8fc;
@@ -164,8 +164,9 @@
   outline: none;
   transition: all 0.2s ease;
   position: relative;
-  z-index: 1; /* ← above any pseudo-element */
-  -webkit-appearance: none; /* ← fix iOS styling issues */
+  z-index: 1;
+  background: #f7f8fc;
+  -webkit-appearance: none; /* ← make sure it's not transparent */
 }
 
 .input-field:focus {
