@@ -6,7 +6,7 @@
 
 <br /><br />
 
-# 🎓 PW AI Catch-Up
+#  PW AI Catch-Up
 
 ### Turn a missed 3.5-hour lecture into a 15-minute AI catch-up.
 
@@ -22,7 +22,7 @@
 
 ---
 
-## 📌 The Problem
+##  The Problem
 
 > 67% of PW students have active backlogs. A missed lecture = 3.5 hours of content to rewatch — almost nobody does it. Backlogs pile up, confidence drops, students disengage.
 
@@ -30,19 +30,19 @@
 
 ---
 
-## ✨ What's Inside
+##  What's Inside
 
 | Feature | Description |
 |---|---|
-| 🎬 **AI Explainer Video** | Animated Canvas 2D revision video with Hindi voice narration — runs entirely in the browser |
-| 📄 **Smart Notes** | 3-page structured notes with formulas, diagrams, teacher quotes & board exam tips |
-| ✅ **Mark as Caught Up** | One tap clears the backlog and keeps the streak alive |
-| 🔥 **Streak System** | 12-day streak tracker with calendar heatmap to build daily habits |
-| 📱 **Full Mobile App** | Login → Home → Batch → Chapters → Lectures → Video Player → AI Catch-Up → Profile |
+|  **AI Explainer Video** | Animated Canvas 2D revision video with Hindi voice narration — runs entirely in the browser |
+|  **Smart Notes** | 3-page structured notes with formulas, diagrams, teacher quotes & board exam tips |
+|  **Mark as Caught Up** | One tap clears the backlog and keeps the streak alive |
+|  **Streak System** | 12-day streak tracker with calendar heatmap to build daily habits |
+|  **Full Mobile App** | Login → Home → Batch → Chapters → Lectures → Video Player → AI Catch-Up → Profile |
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 No build step. No dependencies. Just open and run.
 
@@ -65,7 +65,7 @@ python3 -m http.server 5500
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 pw-ai-catchup/
@@ -93,7 +93,7 @@ pw-ai-catchup/
 
 ---
 
-## 🤖 AI Video Engine
+##  AI Video Engine
 
 The explainer video is a **Canvas 2D animation running at 30fps in the browser** — no video file, no external service needed.
 
@@ -138,7 +138,7 @@ Get a key at [sarvam.ai](https://sarvam.ai) · Key is saved in `localStorage`
 
 ---
 
-## 🧭 Navigation API
+##  Navigation API
 
 All screens are `div.screen` elements in `index.html`. The router handles transitions:
 
@@ -166,7 +166,7 @@ login
 
 ---
 
-## 🎨 Design System
+##  Design System
 
 All tokens in `css/variables.css`:
 
@@ -188,23 +188,23 @@ All tokens in `css/variables.css`:
 
 ---
 
-## 📱 All Screens
+##  All Screens
 
 <details>
 <summary><b>Click to expand full feature list</b></summary>
 
-### 🔐 Login Screen
+###  Login Screen
 - Mobile number input with +91 prefix
 - 5-box OTP input with auto-advance and backspace handling
 - Google Sign-In button
 - Animated PW logo and social proof stats
 
-### 🎯 Course Setup
+###  Course Setup
 - Batch selection grid: Udaan (Class 10), Neev (Class 9), Arjuna (JEE), Yakeen (NEET)
 - Animated batch chips with custom SVG icons per batch
 - Progress bar (Step 2 of 3)
 
-### 🏠 Home Dashboard
+###  Home Dashboard
 - Personalized greeting + streak pill (12-day)
 - Batch progress bar (62% complete)
 - Live class banner with Join button
@@ -213,33 +213,33 @@ All tokens in `css/variables.css`:
 - Today's schedule horizontal scroll
 - Motivation quote card
 
-### 📚 Batch Screen
+###  Batch Screen
 - Overview stats: Progress 62% / Backlogs 2 / Done 38
 - Subject cards: Physics, Chemistry, Mathematics, Biology
 - Individual progress bars and backlog count warnings
 - Batch switcher card
 
-### 📋 Chapters Screen
+###  Chapters Screen
 - Chapter list with status tags
 - ✅ Completed &nbsp; ⚠️ Backlog (with AI badge) &nbsp; 🔒 Not Started
 
-### 🎥 Lectures Screen
+###  Lectures Screen
 - Per-lecture status pills
 - AI Video and Smart Notes buttons on every lecture card
 - "Catch Up in 15 mins with AI" CTA on backlog lectures
 - Missed N days ago indicator
 
-### ▶️ Video Player
+###  Video Player
 - Custom HTML5 controls (no browser default UI)
 - Seek bar, play/pause, ±10s skip, fullscreen
 - Aria labels on all buttons
 - AI Video & Smart Notes quick-access below player
 
-### 🤖 AI Catch-Up Screen
+###  AI Catch-Up Screen
 - **AI Video tab:** Canvas animation, scene navigation, progress bar with seek, timestamps list
 - **Smart Notes tab:** PDF download bar, 3 inline scrollable pages with formula boxes, SVG diagrams, quote callouts, board tips, solved numericals
 
-### 👤 Profile Screen
+###  Profile Screen
 - Avatar with initial, name, email, batch pill
 - Stats: Classes Done 38, Streak 12, Rank #234
 - 14-day streak calendar heatmap (green = active, gray = missed)
@@ -249,7 +249,7 @@ All tokens in `css/variables.css`:
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ```
 Frontend     → Vanilla HTML5 + CSS3 + JavaScript (zero frameworks)
@@ -264,7 +264,7 @@ Font         → Nunito via Google Fonts
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [x] Full mobile app UI — all screens navigable
 - [x] AI canvas explainer video with Hindi voice
@@ -280,7 +280,7 @@ Font         → Nunito via Google Fonts
 
 ---
 
-## 💡 The Bigger Vision
+##  The Bigger Vision
 
 This prototype is one slice of what AI can do inside PW:
 
@@ -291,11 +291,11 @@ This prototype is one slice of what AI can do inside PW:
 
 ---
 
-## 👨‍💻 Developer
+##  Developer
 
 **Kanak Ahuja**
 Tech · Product · Machine Learning · AI
-📧 [kanakahuja@pw.live](mailto:kanakahuja@pw.live)
+📧 [kanakahhuja@gmail.com]
 
 Built solo as a hackathon prototype for Physics Wallah.
 *Would be happy to work on improving these features — and a lot more.*
@@ -304,6 +304,6 @@ Built solo as a hackathon prototype for Physics Wallah.
 
 <div align="center">
 
-Built with ❤️ for PW students &nbsp;·&nbsp; April 2026
+Built with ❤️ for PW students &nbsp;·&nbsp
 
 </div>
